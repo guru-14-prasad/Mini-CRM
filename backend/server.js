@@ -16,6 +16,17 @@ const pool = new Pool({
 });
 
 // Test route
+app.get("/test-db", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT NOW()");
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database connection error");
+  }
+});
+
+// POST API
 app.post("/leads", async (req, res) => {
   try {
     const { name, phone, source } = req.body;
@@ -29,6 +40,16 @@ app.post("/leads", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send("Error inserting data");
+  }
+});
+
+app.get("/leads", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM leads ORDER BY id DESC");
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching data");
   }
 });
 
