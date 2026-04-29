@@ -16,13 +16,19 @@ const pool = new Pool({
 });
 
 // Test route
-app.get("/test-db", async (req, res) => {
+app.post("/leads", async (req, res) => {
   try {
-    const result = await pool.query("SELECT NOW()");
-    res.json(result.rows);
+    const { name, phone, source } = req.body;
+
+    const result = await pool.query(
+      "INSERT INTO leads (name, phone, source) VALUES ($1, $2, $3) RETURNING *",
+      [name, phone, source]
+    );
+
+    res.json(result.rows[0]);
   } catch (err) {
     console.error(err);
-    res.status(500).send("Database connection error");
+    res.status(500).send("Error inserting data");
   }
 });
 
