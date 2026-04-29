@@ -72,6 +72,20 @@ app.put("/leads/:id", async (req, res) => {
   }
 });
 
+//DELETE API
+app.delete("/leads/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await pool.query("DELETE FROM leads WHERE id=$1", [id]);
+
+    res.json({ message: "Lead deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error deleting lead");
+  }
+});
+
 // Start server
 app.listen(5000, () => {
   console.log("Server running on port 5000");
