@@ -43,6 +43,7 @@ app.post("/leads", async (req, res) => {
   }
 });
 
+//GET API
 app.get("/leads", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM leads ORDER BY id DESC");
@@ -50,6 +51,24 @@ app.get("/leads", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send("Error fetching data");
+  }
+});
+
+//PUT API
+app.put("/leads/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const result = await pool.query(
+      "UPDATE leads SET status=$1 WHERE id=$2 RETURNING *",
+      [status, id]
+    );
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error updating status");
   }
 });
 
