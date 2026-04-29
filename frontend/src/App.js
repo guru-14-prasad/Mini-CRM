@@ -142,7 +142,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1>🚀 Lead Management System</h1>
+      <h1 className="animated-title">Lead Management System</h1>
 
       {/* Dashboard */}
       <div className="dashboard">
